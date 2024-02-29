@@ -1,18 +1,36 @@
-on: push
-name: Format
+name: Code Formatter
+
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   format:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - run: npm install
-      - run: npm run format
-      - run: git config --global user.email "rikokamil97@gmail.com"
-      - run: git config --global user.name "Peter3Khalil"
-      - run: git add .
-      - run: git commit -m "Format code"
 
+      - name: Install Prettier
+        run: npm install --save-dev --save-exact prettier
+
+      - name: Run Prettier
+        run: npx prettier --write .
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git diff --quiet && git diff --staged --quiet || (git add . && git commit -m "Apply code formatting")
+      
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
