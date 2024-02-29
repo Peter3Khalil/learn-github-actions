@@ -11,4 +11,6 @@ jobs:
           node-version: '14'
       - run: npm install
       - run: npm run format
+      - run: git add .
+      - run: git commit -m "Format code"
 
