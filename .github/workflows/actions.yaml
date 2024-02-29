@@ -11,6 +11,8 @@ jobs:
           node-version: '14'
       - run: npm install
       - run: npm run format
+      - run: git config --global user.email "rikokamil97@gmail.com"
+      - run: git config --global user.name "Peter3Khalil"
       - run: git add .
       - run: git commit -m "Format code"
 
